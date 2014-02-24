@@ -472,6 +472,9 @@ UI actions on window needing mouse would not work in area not falling under the 
             }
         }
 
+        /// <summary>
+        /// Moves window to the specific position on desktop
+        /// </summary>
         public virtual void Move ( double x, double y )
         {
             var pattern = ( TransformPattern ) Pattern ( TransformPattern.Pattern );
