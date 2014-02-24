@@ -18,11 +18,30 @@ namespace TestStack.White.UIItems
         {
             get
             {
-                ValuePattern valuePattern = GetValuePattern();
-                string value = valuePattern.Current.Value;
-                return double.Parse(value);
+                try
+                {
+                    ValuePattern valuePattern = GetValuePattern ();
+                    string value = valuePattern.Current.Value;
+                    return double.Parse ( value );
+                }
+                catch
+                {
+                    RangeValuePattern rangeValuePattern = ( RangeValuePattern ) Pattern ( RangeValuePattern.Pattern );
+                    return rangeValuePattern.Current.Value;
+                }
             }
-            set { GetValuePattern().SetValue(value.ToString()); }
+            set
+            {
+                try
+                {
+                    GetValuePattern ().SetValue ( value.ToString () );
+                }
+                catch
+                {
+                    RangeValuePattern rangeValuePattern = ( RangeValuePattern ) Pattern ( RangeValuePattern.Pattern );
+                    rangeValuePattern.SetValue ( value );
+                }
+            }
         }
 
         private ValuePattern GetValuePattern()

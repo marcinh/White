@@ -471,5 +471,11 @@ UI actions on window needing mouse would not work in area not falling under the 
                         element.Current.HasKeyboardFocus && !element.Current.ControlType.Equals(ControlType.Custom));
             }
         }
+
+        public virtual void Move ( double x, double y )
+        {
+            var pattern = ( TransformPattern ) Pattern ( TransformPattern.Pattern );
+            pattern.Move ( x, y );
+        }
     }
 }

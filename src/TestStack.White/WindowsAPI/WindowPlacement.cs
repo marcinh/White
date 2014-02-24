@@ -58,6 +58,16 @@ namespace TestStack.White.WindowsAPI
             time = 0;
             mouseData = 0;
         }
+
+        public MouseInput ( int dwFlags, IntPtr dwExtraInfo, int dx, int dy, int mouseData, int time )
+        {
+            this.dwFlags = dwFlags;
+            this.dwExtraInfo = dwExtraInfo;
+            this.dx = dx;
+            this.dy = dy;
+            this.time = time;
+            this.mouseData = mouseData;
+        }
     }
 
     /// <summary>

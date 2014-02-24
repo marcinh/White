@@ -89,6 +89,7 @@ namespace TestStack.White.Mappings
             items.Add(ControlDictionaryItem.Win32Secondary(typeof(Win32TreeNode), ControlType.TreeItem));
 
             items.Add(new ControlDictionaryItem(typeof(DateTimePicker), ControlType.Pane, "SysDateTimePick32", true, true, false, WindowsFramework.WinForms.FrameworkId(), false));
+            items.Add(new ControlDictionaryItem(typeof(DateTimePicker), ControlType.Pane, "SysDateTimePick32", true, true, false, WindowsFramework.Win32.FrameworkId(), false));
             items.Add(new ControlDictionaryItem(typeof(WpfDatePicker), ControlType.Custom, "DatePicker", true, true, false, WindowsFramework.Wpf.FrameworkId(), false));
             items.Add(new ControlDictionaryItem(typeof(WpfDatePicker), ControlType.Pane, "DatePicker", true, true, false, WindowsFramework.Silverlight.FrameworkId(), false));
             items.Add(new ControlDictionaryItem(typeof(GroupBox), ControlType.Group, string.Empty, false, true, false, null, true));

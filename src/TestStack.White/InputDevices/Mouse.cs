@@ -96,6 +96,21 @@ namespace TestStack.White.InputDevices
             get { return GetSystemMetrics(SystemMetric.SM_SWAPBUTTON) == 0 ? WindowsConstants.MOUSEEVENTF_LEFTUP : WindowsConstants.MOUSEEVENTF_RIGHTUP; }
         }
 
+        private static int MouseScroll
+        {
+            get { return ( WindowsConstants.MOUSEEVENTF_WHEEL ); }
+        }
+
+        public static void ScrollUp ()
+        {
+            SendInput ( InputFactory.Mouse ( MouseInput ( MouseScroll, 0, 0, 120, 0 ) ) );
+        }
+
+        public static void ScrollDown ()
+        {
+            SendInput ( InputFactory.Mouse ( MouseInput ( MouseScroll, 0, 0, -120, 0 ) ) );
+        }
+
         public virtual void RightClick()
         {
             SendInput(InputFactory.Mouse(MouseInput(RightMouseButtonDown)));
@@ -154,6 +169,11 @@ namespace TestStack.White.InputDevices
         private static MouseInput MouseInput(int command)
         {
             return new MouseInput(command, GetMessageExtraInfo());
+        }
+
+        private static MouseInput MouseInput ( int command, int dx, int dy, int mouseData, int time )
+        {
+            return new MouseInput ( command, GetMessageExtraInfo (), dx, dy, mouseData, time );
         }
 
         public virtual void RightClick(Point point, ActionListener actionListener)
