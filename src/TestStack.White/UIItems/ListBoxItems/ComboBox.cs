@@ -1,5 +1,7 @@
+using System.Threading;
 using System.Windows.Automation;
 using TestStack.White.AutomationElementSearch;
+using TestStack.White.Configuration;
 using TestStack.White.Recording;
 using TestStack.White.UIItemEvents;
 using TestStack.White.UIItems.Actions;
@@ -19,6 +21,7 @@ namespace TestStack.White.UIItems.ListBoxItems
         public ComboBox(AutomationElement automationElement, ActionListener actionListener) : base(automationElement, actionListener)
         {
             this.actionListener = actionListener;
+            MakeActionReady();
         }
 
         public override VerticalSpan VerticalSpan
@@ -73,6 +76,7 @@ namespace TestStack.White.UIItems.ListBoxItems
                 return;
             }
             if (Equals(itemText, SelectedItemText)) return;
+            ToggleDropDown();
             base.Select(itemText);
         }
 
@@ -83,10 +87,27 @@ namespace TestStack.White.UIItems.ListBoxItems
                 Logger.Warn("Could not select " + index + "in " + Name + " since it is disabled");
                 return;
             }
+            ToggleDropDown();
             base.Select(index);
-            var p = (ExpandCollapsePattern) this.AutomationElement.GetCurrentPattern(ExpandCollapsePattern.Pattern);
-            if (p.Current.ExpandCollapseState.Equals(ExpandCollapseState.Expanded))
-                p.Collapse();
+        }
+
+        protected virtual void MakeActionReady()
+        {
+            if (!CoreAppXmlConfiguration.Instance.ComboBoxItemsPopulatedWithoutDropDownOpen) return;
+            if (!Enabled) return;
+
+            var expandCollapse = automationElement.GetCurrentPattern(ExpandCollapsePattern.Pattern) as ExpandCollapsePattern;
+            if (expandCollapse == null) return;
+
+            expandCollapse.Expand();
+            Thread.Sleep(100);
+            expandCollapse.Collapse();
+        }
+
+        protected virtual void  ToggleDropDown()
+        {
+            var button = new Button(Finder.Child(AutomationSearchCondition.ByControlType(ControlType.Button)), actionListener);
+            button.Click();
         }
 
         public override void HookEvents(UIItemEventListener eventListener)

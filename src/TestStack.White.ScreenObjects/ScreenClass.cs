@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TestStack.White.Bricks;
+using TestStack.White.Configuration;
 using TestStack.White.ScreenObjects.EntityMapping;
 using TestStack.White.ScreenObjects.Interceptors;
 using TestStack.White.ScreenObjects.ScreenAttributes;
@@ -65,7 +66,10 @@ namespace TestStack.White.ScreenObjects
 
         private static SearchCriteria SearchCondition(FieldInfo fieldInfo, WindowsFramework framework)
         {
-            SearchCriteria defaultCriteria = SearchCriteria.ByAutomationId(fieldInfo.Name).AndControlType(fieldInfo.FieldType, framework);
+            int prefix = CoreAppXmlConfiguration.Instance.ControlNamePrefixLength;
+
+            SearchCriteria defaultCriteria =
+                SearchCriteria.ByText(fieldInfo.Name.Substring(prefix)).AndControlType(fieldInfo.FieldType, framework);
             SearchCriteria searchCriteria = null;
             object[] customAttributes = fieldInfo.GetCustomAttributes(false);
             foreach (Attribute customAttribute in customAttributes)

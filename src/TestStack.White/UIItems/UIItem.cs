@@ -337,7 +337,13 @@ namespace TestStack.White.UIItems
         {
             get
             {
-                var displayedItem = new DisplayedItem(new IntPtr(automationElement.Current.NativeWindowHandle));
+                int nwHanlde = automationElement.Current.NativeWindowHandle;
+
+                var displayedItem = new DisplayedItem(new IntPtr(nwHanlde));
+                if ( nwHanlde == 0 )
+                {
+                    displayedItem.Bounds = Bounds;
+                }
                 using (System.Drawing.Image image = displayedItem.GetVisibleImage())
                     return new Bitmap(image);
             }

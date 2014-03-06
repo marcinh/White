@@ -1,7 +1,5 @@
-using System.Threading;
 using System.Windows.Automation;
 using TestStack.White.AutomationElementSearch;
-using TestStack.White.Configuration;
 using TestStack.White.UIItems.Actions;
 using TestStack.White.UIItems.Scrolling;
 
@@ -26,29 +24,7 @@ namespace TestStack.White.UIItems.ListBoxItems
         /// </summary>
         public virtual ListItems Items
         {
-            get
-            {
-                ExpandListIfNeeded();
-                return new ListItems(Finder.Descendants(AutomationSearchCondition.ByControlType(ControlType.ListItem)), this);
-            }
-        }
-
-        internal virtual void ExpandListIfNeeded()
-        {
-            if (!CoreAppXmlConfiguration.Instance.ComboBoxItemsPopulatedWithoutDropDownOpen) return;
-            if (!Enabled) return;
-
-            object expandCollapse;
-
-            if (!AutomationElement.TryGetCurrentPattern(ExpandCollapsePattern.Pattern, out expandCollapse)) return;
-
-            var state = (ExpandCollapseState) automationElement
-                .GetCurrentPropertyValue(ExpandCollapsePattern.ExpandCollapseStateProperty);
-            if (state == ExpandCollapseState.Collapsed)
-            {
-                ((ExpandCollapsePattern)expandCollapse).Expand();
-                Thread.Sleep(50);
-            }
+            get { return new ListItems(Finder.Descendants(AutomationSearchCondition.ByControlType(ControlType.ListItem)), this); }
         }
 
         public virtual ListItem Item(string itemText)

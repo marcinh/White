@@ -52,33 +52,52 @@ namespace TestStack.White.WindowsAPI
             this.windowHandle = windowHandle;
         }
 
+        public System.Windows.Rect Bounds { get; set; }
+
         public virtual Bitmap GetVisibleImage()
         {
-            var compatibleDeviceContext = IntPtr.Zero;
-            var deviceContext = IntPtr.Zero;
-            IntPtr bitmap = IntPtr.Zero;
-            Image img;
-            try
+            if ( windowHandle.ToInt32 () != 0 )
             {
-                deviceContext = GetWindowDC(windowHandle);
-                var rect = new Rect();
-                GetWindowRect(windowHandle, ref rect);
-                int width = rect.right - rect.left;
-                int height = rect.bottom - rect.top;
-                compatibleDeviceContext = CreateCompatibleDC(deviceContext);
-                bitmap = CreateCompatibleBitmap(deviceContext, width, height);
-                IntPtr @object = SelectObject(compatibleDeviceContext, bitmap);
-                BitBlt(compatibleDeviceContext, 0, 0, width, height, deviceContext, 0, 0, srccopy);
-                SelectObject(compatibleDeviceContext, @object);
+                var compatibleDeviceContext = IntPtr.Zero;
+                var deviceContext = IntPtr.Zero;
+                IntPtr bitmap = IntPtr.Zero;
+                Image img;
+                try
+                {
+                    deviceContext = GetWindowDC ( windowHandle );
+                    var rect = new Rect ();
+                    GetWindowRect ( windowHandle, ref rect );
+                    int width = rect.right - rect.left;
+                    int height = rect.bottom - rect.top;
+                    compatibleDeviceContext = CreateCompatibleDC ( deviceContext );
+                    bitmap = CreateCompatibleBitmap ( deviceContext, width, height );
+                    IntPtr @object = SelectObject ( compatibleDeviceContext, bitmap );
+                    BitBlt ( compatibleDeviceContext, 0, 0, width, height, deviceContext, 0, 0, srccopy );
+                    SelectObject ( compatibleDeviceContext, @object );
+                }
+                finally
+                {
+                    DeleteDC ( compatibleDeviceContext );
+                    ReleaseDC ( windowHandle, deviceContext );
+                    img = Image.FromHbitmap ( bitmap );
+                    DeleteObject ( bitmap );
+                }
+
+                return new Bitmap ( img );
             }
-            finally
+            else
             {
-                DeleteDC(compatibleDeviceContext);
-                ReleaseDC(windowHandle, deviceContext);
-                img = Image.FromHbitmap(bitmap);
-                DeleteObject(bitmap);
-            }
-            using (img) return new Bitmap(img);
+                Rectangle bounds = new Rectangle ( ( int ) Bounds.Left, ( int ) Bounds.Top, ( int ) ( Bounds.Right - Bounds.Left ), ( int ) ( Bounds.Bottom - Bounds.Top ) );
+
+                Bitmap bitmap = new Bitmap ( bounds.Width, bounds.Height );
+
+                using ( Graphics g = Graphics.FromImage ( bitmap ) )
+                {
+                    g.CopyFromScreen ( bounds.Left, bounds.Top, 0, 0, bounds.Size );
+                }
+
+                return bitmap;
+            } 
         }
     }
 }

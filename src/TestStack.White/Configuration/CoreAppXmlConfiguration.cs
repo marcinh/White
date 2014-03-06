@@ -35,6 +35,7 @@ namespace TestStack.White.Configuration
             DefaultValues.Add("DoubleClickInterval", 0);
             DefaultValues.Add("MoveMouseToGetStatusOfHourGlass", true);
             DefaultValues.Add("InvertMouseButtons", true);
+            DefaultValues.Add("ControlNamePrefixLength", 0);
         }
 
         public static ICoreConfiguration Instance
@@ -173,5 +174,13 @@ namespace TestStack.White.Configuration
             get { return Convert.ToInt32(UsedValues["DoubleClickInterval"]); }
             set { SetUsedValue("DoubleClickInterval", value); }
         }
+
+
+        public virtual int ControlNamePrefixLength
+        {
+            get { return Convert.ToInt32(UsedValues["ControlNamePrefixLength"]); }
+            set { SetUsedValue("ControlNamePrefixLength", value); }
+        }
+
     }
 }
