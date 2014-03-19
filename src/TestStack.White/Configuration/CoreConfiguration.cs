@@ -34,7 +34,5 @@ namespace TestStack.White.Configuration
         bool MoveMouseToGetStatusOfHourGlass { get; set; }
         ILoggerFactory LoggerFactory { get; set; }
         IDisposable ApplyTemporarySetting(Action<ICoreConfiguration> changes);
-
-        int ControlNamePrefixLength { get; set; }
     }
 }
